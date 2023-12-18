@@ -21,5 +21,5 @@
 
 <p>Thank you for visiting my Ediversity React Master Class Implementations repository. Happy coding!</p>
 
-    <!-- Add your LinkedIn profile link here -->
-    <p>Connect with me on <a href="https://www.linkedin.com/in/ammarkofficial/">LinkedIn</a>.</p>
+    
+<p>Connect with me on <a href="https://www.linkedin.com/in/ammarkofficial/">LinkedIn</a>.</p>
