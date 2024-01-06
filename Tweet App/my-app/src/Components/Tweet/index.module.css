@@ -1,0 +1,26 @@
+.tweet{
+    background: rgba(188, 210, 235, 0.192);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.219);
+    backdrop-filter: blur( 4px );
+    -webkit-backdrop-filter: blur( 4px );
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.541);
+    transition: all ease-out .3s;
+    margin-top: 30px;
+}
+
+.tweet:hover{
+    transform: scale(1.03);
+}
+
+.tweet_content{
+    width: 95%;
+    margin: 30px 40px 20px;
+}
+
+.tweet_stats{
+    display: flex;
+    justify-content: space-between;
+    padding: 0 40px;
+    cursor: pointer;
+}
