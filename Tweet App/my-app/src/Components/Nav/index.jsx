@@ -5,7 +5,7 @@ const index = () => {
   return (
 
     <nav>
-    <h3>My-App</h3>
+    <h3>Density</h3>
     <ul className={classes.list_items}>
         <li className={classes.list_item}>Home</li>
         <li className={classes.list_item}>Settings</li>

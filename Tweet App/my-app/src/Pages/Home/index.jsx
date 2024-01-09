@@ -2,6 +2,7 @@ import classes from "./index.module.css"
 import Nav from "../../Components/Nav"
 import Profile from "../../Components/Profile"
 import Tweet from "../../Components/Tweet"
+import Footer from "../../Components/Footer"
 
 const index = () => {
   return (
@@ -15,6 +16,7 @@ const index = () => {
             })
           }
         </div>
+        <Footer/>
     </>
     
   )
