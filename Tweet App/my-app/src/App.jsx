@@ -11,9 +11,9 @@ const App = () => {
   return (
     <>
       {/* <Auth /> */}
-      <Home/>
+      {/* <Home/> */}
       {/* <Settings/> */}
-      {/* <Followers name={"Sadaqat Ullah"} date={"2022"} handle={"KhanSadaqat"}/> */}
+      <Followers/>
     </>
   )
 }

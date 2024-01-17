@@ -2,28 +2,14 @@
 import classes from "./index.module.css"
 import Nav from "../../Components/Nav"
 import Footer from "../../Components/Footer"
+import Follower from "../../Components/Follower"
 
-const index = ({name, handle, date}) => {
+const index = () => {
   return (
    <>
-   
    <Nav/>
     <div className={classes.container}>
-
-    <div className={classes.follower}>
-        <div className={classes.follower_img}></div>
-
-        <div>
-            <div className={classes.follower_top}>
-                <h3 className={classes.name}> {name} </h3>
-                <h4 className={classes.date}> Follower Since {date}</h4>
-        </div>
-        
-        <h4 className={classes.handel}>@{handle}</h4>
-
-        </div>
-        
-    </div>
+    <Follower name={"Sadaqat Ullah"} date={"2022"} handle={"KhanSadaqat"}/>
     </div>
     
     <Footer/>
