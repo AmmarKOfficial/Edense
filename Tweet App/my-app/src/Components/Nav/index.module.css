@@ -24,12 +24,18 @@ nav ul{
     
 }
 
-nav ul li{
+
+a{
+    text-decoration: none;
+    color: #fff;
     transition: all ease-out 0.3s;
 }
 
-nav ul li:hover{
-    color: black;
+.active{
+    color: rgb(255, 0, 0);
 }
 
+a:hover{
+    color: black;
+}
 

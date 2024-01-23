@@ -23,14 +23,20 @@ const LEFT_LEG = (
 const RIGHT_LEG = (
    <div className="r_leg"/>
 )
-export  function HangmanDraw() {
+
+const BODY_PART = [HEAD,
+   BODY,
+   RIGHT_ARM,
+      LEFT_ARM,
+         LEFT_LEG,
+            RIGHT_LEG,]
+
+type HangmanDrawingProps ={
+   numberofGuesses: number
+}
+export  function HangmanDraw({numberofGuesses} : HangmanDrawingProps) {
    return <div className="box">
-      {HEAD}
-      {BODY}
-      {RIGHT_ARM}
-      {LEFT_ARM}
-      {LEFT_LEG}
-      {RIGHT_LEG}
+      {BODY_PART.slice(0, numberofGuesses)}
       <div className="knock"/>
       <div className="over"/>
       <div className="stand"/>

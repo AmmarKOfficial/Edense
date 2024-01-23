@@ -1,0 +1,33 @@
+.key__box{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(75px,1fr));
+    gap: .5rem;
+}
+
+
+.keys{
+    width: 100%;
+    border: 3px solid black;
+    background: none;
+    aspect-ratio: 1/1;
+    font-size: 2.5rem;
+    text-transform: uppercase;
+    padding: .5rem;
+    cursor: pointer; 
+    color: black;
+    transition: all .1s ease-in-out;
+}
+
+.keys.active{
+    background-color: hsl(200, 100%, 50%);
+    color: aliceblue;
+}
+
+.keys.inactive{
+    opacity: 0.3;
+}
+
+.keys:hover, .key:focus{
+    background-color: hsl(200, 100%, 75%);
+    font-weight: bold;
+}

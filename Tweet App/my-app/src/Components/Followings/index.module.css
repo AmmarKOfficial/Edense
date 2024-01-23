@@ -1,0 +1,42 @@
+.following{
+    background: rgba(188, 210, 235, 0.192);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.219);
+    backdrop-filter: blur( 4px );
+    -webkit-backdrop-filter: blur( 4px );
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.541);
+    transition: all ease-out .3s;
+    margin-top: 30px;
+
+    display: flex;
+    align-items: center;
+
+}
+
+.following_img{
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background-color: aqua;
+    margin: 1.5rem;
+}
+
+.following_top{
+    display: flex;
+    gap: 50rem;
+}
+
+.following:hover{
+    transform: scale(1.03);
+}
+
+h3{
+    font-size: 1.2rem;
+    color: rgb(41, 41, 41);
+    margin: 0;
+}
+
+h4{
+    color: rgb(41, 41, 41);
+    margin: 3px 0;
+}
