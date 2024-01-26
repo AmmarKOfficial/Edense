@@ -1,8 +1,13 @@
 import classes from "./index.module.css"
 import { NavLink } from "react-router-dom"
+import { signOut } from "firebase/auth";
+import { auth } from "../../firebase";
+import { useNavigate } from "react-router-dom";
 
 
 const index = () => {
+
+  const navigate = useNavigate()
 
   let units = [
     {placeholder:"Home",path:'/home',page:true},
@@ -13,6 +18,19 @@ const index = () => {
 
 
   ]
+
+  const logoutHandler = () =>{
+    signOut(auth)
+    .then(()=>{
+      navigate("/")
+    })
+    .catch((err)=>{
+      console.log(err)
+    })
+
+  }
+
+
   return (
 
     <nav>
@@ -23,11 +41,12 @@ const index = () => {
       {
         units.map((item,index)=>(
           <li key={index} className={classes.list_item}>
-              <NavLink to={item.path} 
-              className={({ isActive }) => (isActive ? 'active' : '')}
+              {item.page ? <NavLink to={item.path} 
+              className={({ isActive }) => (isActive ? classes.active : '')}
+              // className={classes.active}
             >
               {item.placeholder}
-              </NavLink>
+              </NavLink> : <button className={classes.btn} onClick={logoutHandler}>Signout</button> }
           </li>
         ))
       }

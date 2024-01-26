@@ -1,39 +1,46 @@
 import { useState } from "react";
 import classes from "./index.module.css"
+import { signInWithEmailAndPassword } from 'firebase/auth'
+import { auth } from "../../firebase"
+import { useNavigate } from "react-router-dom";
 
 
 const index = ({loginState}) => {
+
+  const navigate = useNavigate();
 
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [errorMessage, SetErrorMessage] = useState("")
 
-  const onLogin = (e)=>{
+  const onLogin = async (e)=>{
     e.preventDefault();
 
     let validEmail = email.trim()
 
     if (!validEmail) {
-      SetErrorMessage("Please write your email!")
+      SetErrorMessage("Please Write Your Email!")
     } 
+    else if (password.length < 8){
+      SetErrorMessage("Password Should Have Atleast 8 Characters")
+    }
     else {
+      console.log(email, password)
+
+      try {
+        const user = await signInWithEmailAndPassword(auth, email, password);
+        console.log(user);
+
+        navigate("/home");
+      } catch (error) {
+        console.log(error.errorCode)
+        console.log(error.errorMessage)
+      }
       SetErrorMessage("")
     }
     
-    console.log(email);
-    console.log(password.length);
   }
 
-  const handlePassword = (e) =>{
-    setPassword(e.target.value)
-    if(password.length < 8 ) {
-      SetErrorMessage("Password use be atleast 8 characters")
-    }
-    else {
-      SetErrorMessage("")
-    }
-
-  }
 
   return (
     <>
@@ -44,7 +51,7 @@ const index = ({loginState}) => {
       
       <form onSubmit={(e)=>{onLogin(e)}} className={classes.login_form}>
         <input className={classes.input_field} type="email" value={email} onChange={(e)=>{setEmail(e.target.value)}} placeholder="Your Email" required/>
-        <input className={classes.input_field} type="password" value={password} onChange={handlePassword} placeholder="Your Password" required/>
+        <input className={classes.input_field} type="password" value={password} onChange={(e)=>{setPassword(e.target.value)}}  placeholder="Your Password" required/>
         <input className={classes.btn} type="submit" value={"Sign In"} />
         
       </form>

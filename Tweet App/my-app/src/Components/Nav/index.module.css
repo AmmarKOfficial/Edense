@@ -21,6 +21,7 @@ nav ul{
     margin-right: 30px;
     list-style: none;
     cursor: pointer;
+    align-items: center;
     
 }
 
@@ -39,3 +40,17 @@ a:hover{
     color: black;
 }
 
+.btn {
+    background: transparent;
+    color: #fff;
+    transition: all ease-out 0.3s;
+    font-size: 1.2vw;
+    padding: 5px 10px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+  }
+
+.btn:hover{
+    color: black;
+}

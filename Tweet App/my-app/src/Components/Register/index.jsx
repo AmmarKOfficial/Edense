@@ -1,5 +1,7 @@
 import { useState } from "react"
 import classes from "./index.module.css"
+import {createUserWithEmailAndPassword} from 'firebase/auth'
+import {auth} from '../../firebase'
 
 const index = (props) => {
   const loginState = props.loginState
@@ -10,33 +12,37 @@ const index = (props) => {
   const [isConfirmPassword,setIsConfirmPassword] =useState("")
   const [isErrorMessage,setIsErrorMessage] =useState(" ")
 
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
 
     let validEmail = isEmail.trim()
 
-    if (!validEmail) {
+    if (!isName.trim()){
+      setIsErrorMessage("Write Correct Name")
+    }
+    else if (!validEmail) {
       setIsErrorMessage("Please Correct Your Email!")
+    } 
+    else if (isPassword.length < 8 ){
+      setIsErrorMessage("Paswords must be atleast 8 characters")
+    }
+    else if (isConfirmPassword != isPassword){
+        setIsErrorMessage("Paswords are not same")
     } 
     else {
       setIsErrorMessage("")
+      try {
+        const user = await createUserWithEmailAndPassword(auth, isEmail, isPassword)
+        console.log(user)
+      } 
+      catch (error) {
+        console.log(error.code)
+      }
+      console.log(isName, isEmail, isPassword)
     }
   }
 
-  const handleConfirmPass = (e) => {
-    setIsConfirmPassword(e.target.value)
-    console.log(isPassword)
-    console.log(isConfirmPassword)
-
-    if(isPassword != isConfirmPassword){
-      setIsErrorMessage("Confirm Password is not same is Password")
-    }
-    else
-    {
-      setIsErrorMessage("")
-    }
-
-  }
+ 
   
   return (
     <>
@@ -48,10 +54,10 @@ const index = (props) => {
       }
       
       <form onSubmit={(e)=>{handleRegister(e)}} className={classes.login_form}>
-        <input className={classes.input_field} value={isName} onChange={(e)=>{setIsName(e.target.value)}} type="name" placeholder="Your Name" />
-        <input className={classes.input_field} value={isEmail} onChange={(e)=>{setIsEmail(e.target.value)}} type="email" placeholder="Your Email" />
-        <input className={classes.input_field} value={isPassword} onChange={(e)=>{setIsPassword(e.target.value)}} type="password" placeholder="Your Password" />
-        <input className={classes.input_field} value={isConfirmPassword} onChange={(e)=>{handleConfirmPass(e)}} type="password" placeholder="Confirm Password" />
+        <input required className={classes.input_field} value={isName} onChange={(e)=>{setIsName(e.target.value)}} type="name" placeholder="Your Name" />
+        <input required className={classes.input_field} value={isEmail} onChange={(e)=>{setIsEmail(e.target.value)}} type="email" placeholder="Your Email" />
+        <input required className={classes.input_field} value={isPassword} onChange={(e)=>{setIsPassword(e.target.value)}} type="password" placeholder="Your Password" />
+        <input required className={classes.input_field} value={isConfirmPassword} onChange={(e)=>{setIsConfirmPassword(e.target.value)}} type="password" placeholder="Confirm Password" />
         <input className={classes.btn} type="submit" value={"Register"} />
         
       </form>
