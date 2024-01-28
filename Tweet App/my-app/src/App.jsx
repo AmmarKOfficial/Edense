@@ -13,35 +13,35 @@ import NotFound from './Pages/Miss'
 
 const App = () => {
 
+  const [isLogin, setIsLogin] = useState(false)
+
   useEffect(() => {
     onAuthStateChanged(auth, (user)=>{
       if(user){
-        console.log("User is Loged In")
         setIsLogin(true)
       }else{
-        console.log("User Is Not Loggend In")
         setIsLogin(false)
       }
     })
    
   }, [])
-
-  const [isLogin, setIsLogin] = useState(false)
   
   
   return (
     <>
+    {
+      console.log(isLogin)
+    }
     <Routes>
       {
         isLogin ? <>
         <Route path=':id' element={<Home/>}/>
-
+        <Route path='/' element={<Home/>}/>
         <Route path='/home'>
-        <Route index element={<Home/>}/>
-        <Route path='followers' element={<Followers/>}/>
-        <Route path='followings' element={<Followings/>}/>
+          <Route index element={<Home/>}/>
+          <Route path='followers' element={<Followers/>}/>
+          <Route path='followings' element={<Followings/>}/>
         </Route>
-
         <Route path='/setting' element={<Settings/>}/>
         </> :
         <>
@@ -50,9 +50,6 @@ const App = () => {
         </>
         
       }
-      
-      
-
       </Routes>
     </>
   )
