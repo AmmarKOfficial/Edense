@@ -28,13 +28,10 @@ const index = ({loginState}) => {
       console.log(email, password)
 
       try {
-        const user = await signInWithEmailAndPassword(auth, email, password);
-        console.log(user);
-
+        const res = await signInWithEmailAndPassword(auth, email, password);
         navigate("/home");
       } catch (error) {
-        console.log(error.errorCode)
-        console.log(error.errorMessage)
+        console.log(error)
       }
       SetErrorMessage("")
     }
