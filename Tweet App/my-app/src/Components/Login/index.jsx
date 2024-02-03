@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import { useState } from "react";
 import classes from "./index.module.css"
 import { signInWithEmailAndPassword } from 'firebase/auth'
@@ -29,6 +30,7 @@ const index = ({loginState}) => {
 
       try {
         const res = await signInWithEmailAndPassword(auth, email, password);
+        console.log(res.user.uid);
         navigate("/home");
       } catch (error) {
         console.log(error)

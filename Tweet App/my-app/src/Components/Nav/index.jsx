@@ -12,8 +12,8 @@ const index = () => {
   let units = [
     {placeholder:"Home",path:'/home',page:true},
     {placeholder:"Settings",path:'/setting',page:true},
-    {placeholder:"Followers",path:'/home/followers',page:true},
-    {placeholder:"Followings",path:'/home/followings',page:true},
+    {placeholder:"Followers",path:'/followers',page:true},
+    {placeholder:"Followings",path:'/followings',page:true},
     {placeholder:"Sign Out",path:'/',page:false},
 
 

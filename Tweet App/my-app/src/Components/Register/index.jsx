@@ -1,10 +1,13 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import { useState } from "react"
 import classes from "./index.module.css"
 import {createUserWithEmailAndPassword} from 'firebase/auth'
-import {auth} from '../../firebase'
+import {auth,} from '../../firebase'
+import { getDatabase, ref, set } from 'firebase/database'
 
 const index = (props) => {
-  const loginState = props.loginState
+  const registerState = props.registerState
+  const setIsInMiddleOfRegistration = props.setIsInMiddleOfRegistration
 
   const [isName,setIsName] =useState("")
   const [isEmail,setIsEmail] =useState("")
@@ -13,6 +16,7 @@ const index = (props) => {
   const [isErrorMessage,setIsErrorMessage] =useState(" ")
 
   const handleRegister = async (e) => {
+    setIsInMiddleOfRegistration(true);
     e.preventDefault();
 
     let validEmail = isEmail.trim()
@@ -32,18 +36,30 @@ const index = (props) => {
     else {
       setIsErrorMessage("")
       try {
-        const user = await createUserWithEmailAndPassword(auth, isEmail, isPassword)
-        console.log(user)
+        const resp = await createUserWithEmailAndPassword(auth, isEmail, isPassword)
+
+        const db = getDatabase()
+        set(ref(db, "users/" + resp.user.uid), {
+          name: isName,
+          bio: "A Random Person From The Random Relm",
+          followers: 0,
+          followings:0,
+        })
+        setIsInMiddleOfRegistration(false);
+
       } 
       catch (error) {
         console.log(error.code)
+        setIsInMiddleOfRegistration(false);
       }
       console.log(isName, isEmail, isPassword)
+      setIsConfirmPassword("")
+      setIsName("")
+      setIsEmail("")
+      setIsPassword("")
     }
   }
 
- 
-  
   return (
     <>
       <div className={classes.login}>
@@ -63,7 +79,7 @@ const index = (props) => {
       </form>
 
       <p>
-        Already have an account? {" "} <span className={classes.login_switch} onClick={loginState}> Login </span>
+        Already have an account? {" "} <span className={classes.login_switch} onClick={registerState}> Login </span>
       </p>
 
       </div>
