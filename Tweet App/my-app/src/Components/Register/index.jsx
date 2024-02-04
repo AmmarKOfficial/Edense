@@ -44,6 +44,7 @@ const index = (props) => {
           bio: "A Random Person From The Random Relm",
           followers: 0,
           followings:0,
+          tweets:{},
         })
         setIsInMiddleOfRegistration(false);
 

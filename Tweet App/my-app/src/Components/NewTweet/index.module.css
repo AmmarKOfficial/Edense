@@ -1,0 +1,41 @@
+.tweet{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+    gap: 2rem
+}
+
+.tweet textarea{
+    max-width: 30vw;
+    min-width: 30px;
+}
+
+.tweet input,
+.tweet textarea {
+  border: 1px solid black;
+  font-size: 18px;
+  padding: 10px;
+  width: 30vw;
+}
+.tweet .tweet_submit {
+  transition: all 0.2s linear;
+}
+
+.tweet .tweet_submit:hover {
+  transition: all 0.2s linear;
+  background-color: #535353;
+  color: white;
+  cursor: pointer;
+}
+
+.tweet_stats {
+  display: flex;
+  justify-content: space-between;
+}
+
+.tweet_date,
+.tweet_like {
+  font-weight: 300;
+  color: #535353;
+}

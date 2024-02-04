@@ -7,8 +7,10 @@ import Footer from "../../Components/Footer"
 import { useNavigate } from "react-router-dom";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../../firebase";
-import { getDatabase, ref, onValue } from "firebase/database";
+import { getDatabase, ref, onValue, set, push } from "firebase/database";
 import { useEffect, useState } from "react";
+import NewTweet from "../../Components/NewTweet"
+
 
 const index = () => {
 
@@ -16,13 +18,17 @@ const index = () => {
   const [isLoggedIn, setLoggedIn] = useState(false);
   const [userID, setUserID] = useState(null);
   const [userData, setUserData] = useState();
+  const [newTweetTitle, setNewTweetTitle] = useState("");
+  const [newTweetDescription, setNewTweetDescription] = useState("");
+  const [tweetData, setTweetData] = useState([]);
+  const [addNewTweet, setAddNewTweet] = useState(false)
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         const uid = user.uid;
         setUserID(uid);
-        console.log("In Home File: ",userID)
+        console.log("In Home File: ", userID)
         setLoggedIn(true);
       } else {
         navigate("/");
@@ -31,14 +37,51 @@ const index = () => {
     });
   }, []);
 
+
+  const sendNewTweet = (e) => {
+    e.preventDefault();
+    if (!newTweetTitle.trim() || !newTweetDescription.trim()) {
+      alert("One of the field is empty!");
+      return;
+    }
+    const db = getDatabase();
+    const tweetRef = ref(db, "users/" + userID + "/tweets");
+    const newTweetRef = push(tweetRef);
+    set(newTweetRef, {
+      title: newTweetTitle,
+      description: newTweetDescription,
+      date: new Date().getTime(),
+      likes: 0,
+    });
+    alert("New Tweet Created!");
+    setNewTweetTitle("");
+    setNewTweetDescription("");
+  };
+
   useEffect(() => {
     const db = getDatabase();
     const userDataRef = ref(db, "users/" + userID);
     onValue(userDataRef, (snapshot) => {
       const data = snapshot.val();
       setUserData(data);
+
+      if (data?.tweets) {
+        const tweets = data.tweets;
+        const tweetsList = [];
+        for (const tweet in tweets) {
+          tweetsList.push(tweets[tweet]);
+        }
+
+        setTweetData(tweetsList);
+      }
     });
   }, [userID]);
+
+  let addNewTweetHandler = () => {
+    console.log("New Tweet Button Clicked")
+    setAddNewTweet(!addNewTweet)
+    console.log("Value Of Add New Tweet ", addNewTweet)
+  }
 
   return (
     <>
@@ -47,9 +90,20 @@ const index = () => {
               <Nav/>
             <div className={classes.container}>
               <Profile info={userData}/>
+              <button  className={classes.btn} type="button" onClick={addNewTweetHandler}>Add New Tweet</button>
               {
-                [1,2,3,4,5].map((item,index)=>{
-                  return <Tweet key={index} content="Lorem ipsum dolor sit amet consectetur adipisicing elit. Nulla, fugit illo. Iure exercitationem architecto repudiandae consequuntur laudantium, obcaecati possimus pariatur iste aliquid aspernatur qui esse reprehenderit quisquam odio facere tempore!" date="January 2, 2024" likes="500" />
+                addNewTweet ? 
+                <NewTweet
+                sendNewTweet={sendNewTweet}
+                title={newTweetTitle}
+                description={newTweetDescription}
+                setTitle={setNewTweetTitle}
+                setDescription={setNewTweetDescription}
+              /> : null
+              }
+              {
+                tweetData.map((item,index)=>{
+                  return <Tweet key={index} item={item} />
                 })
               }
             </div>
