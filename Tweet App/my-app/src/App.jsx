@@ -16,6 +16,10 @@ const App = () => {
 
         <Route path=':id' element={<Home/>}/>
         <Route path='/followers' element={<Followers/>}/>
+        <Route path="/home">
+          <Route index element={<Home />} />
+          <Route path=":paramId" element={<Home />} />
+        </Route>
         <Route path='/followings' element={<Followings/>}/>
         <Route path='/home' element={<Home/>}/>
         <Route path='/setting' element={<Settings/>}/>

@@ -10,7 +10,13 @@ const index = ({ item }) => {
         {description}
         </div>
         <div className={classes.tweet_stats}>
-            <h5>{new Date(date).getDay()}</h5>
+            <h5>{`${new Date(
+          date
+        ).getDate()}-${new Date(date).getMonth()}-${new Date(
+          date
+        ).getFullYear()} / ${new Date(date).getHours()}:${new Date(
+          date
+        ).getMinutes()}`}</h5>
             <h5>{likes} Likes</h5>
         </div>
     </div>

@@ -4,7 +4,7 @@ import Nav from "../../Components/Nav"
 import Profile from "../../Components/Profile"
 import Tweet from "../../Components/Tweet"
 import Footer from "../../Components/Footer"
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../../firebase";
 import { getDatabase, ref, onValue, set, push } from "firebase/database";
@@ -15,6 +15,8 @@ import NewTweet from "../../Components/NewTweet"
 const index = () => {
 
   const navigate = useNavigate();
+  const params = useParams();
+  const { paramId } = params;
   const [isLoggedIn, setLoggedIn] = useState(false);
   const [userID, setUserID] = useState(null);
   const [userData, setUserData] = useState();
@@ -22,14 +24,39 @@ const index = () => {
   const [newTweetDescription, setNewTweetDescription] = useState("");
   const [tweetData, setTweetData] = useState([]);
   const [addNewTweet, setAddNewTweet] = useState(false)
+  const [isUserOnHome, setIsUserOnHome] = useState(true)
 
   useEffect(() => {
+
+
     onAuthStateChanged(auth, (user) => {
       if (user) {
         const uid = user.uid;
-        setUserID(uid);
-        console.log("In Home File: ", userID)
         setLoggedIn(true);
+        
+        
+        if(paramId && paramId != uid){
+          setIsUserOnHome(false)
+          console.log("Other Profile")
+        }
+
+        if(paramId){
+          console.log(paramId)
+          const db = getDatabase();
+          const userRef = ref(db, "users/" + paramId)
+          onValue(userRef, (snapshot)=>{
+            const data = snapshot.val();
+            if(!data){
+              navigate("/home");
+              setUserID(uid);
+            }else{
+              setUserID(paramId)
+            }
+          })
+        }else{
+          setUserID(uid);
+        }
+
       } else {
         navigate("/");
         console.log("User is NOT logged in!");
@@ -78,9 +105,7 @@ const index = () => {
   }, [userID]);
 
   let addNewTweetHandler = () => {
-    console.log("New Tweet Button Clicked")
     setAddNewTweet(!addNewTweet)
-    console.log("Value Of Add New Tweet ", addNewTweet)
   }
 
   return (
@@ -90,16 +115,21 @@ const index = () => {
               <Nav/>
             <div className={classes.container}>
               <Profile info={userData}/>
-              <button  className={classes.btn} type="button" onClick={addNewTweetHandler}>Add New Tweet</button>
+               
+              {
+                isUserOnHome && <button  className={classes.btn} type="button" onClick={addNewTweetHandler}>Add New Tweet</button>
+              }
+              
+              
               {
                 addNewTweet ? 
-                <NewTweet
-                sendNewTweet={sendNewTweet}
-                title={newTweetTitle}
-                description={newTweetDescription}
-                setTitle={setNewTweetTitle}
-                setDescription={setNewTweetDescription}
-              /> : null
+                    <NewTweet
+                    sendNewTweet={sendNewTweet}
+                    title={newTweetTitle}
+                    description={newTweetDescription}
+                    setTitle={setNewTweetTitle}
+                    setDescription={setNewTweetDescription}
+                  /> : null
               }
               {
                 tweetData.map((item,index)=>{

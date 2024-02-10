@@ -33,7 +33,8 @@ a{
 }
 
 .active{
-    color: rgb(255, 0, 0);
+    color: rgb(0, 183, 255);
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
 a:hover{

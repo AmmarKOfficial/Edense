@@ -11,7 +11,6 @@ const  index = ({info}) => {
   });
 
   useEffect(() => {
-    console.log("Basic Info - ", info);
     if (info) {
       setUserInfo(info);
     }

@@ -1,8 +1,12 @@
-import React from 'react'
+/* eslint-disable react-hooks/rules-of-hooks */
 import classes from "./index.module.css"
 import Nav from "../../Components/Nav"
-import { useState } from 'react'
 import Footer from '../../Components/Footer'
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { onAuthStateChanged } from "firebase/auth";
+import { getDatabase, ref, onValue, set } from "firebase/database";
+import { auth } from "../../firebase";
 
 const index = () => {
     const [name, setName] = useState("")
@@ -12,6 +16,60 @@ const index = () => {
     const [confirm_new_password, setConfirm_new_password] = useState("")
     const [confirm_bio, setConfirm_bio] = useState(false)
 
+    const navigate = useNavigate();
+    const [userID, setUserID] = useState(null);
+    const [userData, setUserData] = useState();
+    const [isLoggedIn, setLoggedIn] = useState(false);
+
+    useEffect(()=>{
+        onAuthStateChanged(auth,(user)=>{
+            if(user){
+                const uid = user.uid;
+                console.log("In Setting Page",uid)
+
+                const db = getDatabase();
+                setUserID(uid);
+                const userDataRef = ref(db, "users/" + uid);
+                onValue(userDataRef, (snapshot) => {
+                const data = snapshot.val();
+                setName(data.name);
+                setBio(data.bio);
+                setUserData(data);
+                })
+
+                setLoggedIn(true)
+
+            }
+            else{
+                navigate("/")
+                console.log("In Setiting Page User is NOT logged in!");
+            }
+        })
+    },[])
+
+    const submitBasicInfo = () => {
+    const { followings, followers, tweets } = userData;
+    console.log(followers, followings, tweets);
+    const updatedUserData = {
+        name,
+        bio: bio,
+        followers,
+        followings,
+        tweets,
+    };
+
+    try {
+        const db = getDatabase();
+        const userRef = ref(db, "users/" + userID);
+        set(userRef, updatedUserData);
+        setConfirm_bio(false)
+      } catch (error) {
+        console.log("Something went wrong!");
+      }
+    };
+
+
+
     const handlePasswords = (e) =>{
         e.preventDefault()
         setOld_passnord("")
@@ -19,17 +77,12 @@ const index = () => {
         setConfirm_new_password("")
     }
 
-    const handleBio = (e) => {
-        e.preventDefault()
-        setConfirm_bio(false)
-        setName("")
-        setBio("")
-        console.log(name);
-        console.log(bio);
-    }
-
   return (
     <>
+    {
+        isLoggedIn && (
+
+            <>
     <Nav/>
     <div className={classes.container}>
         <h1> Your Profile </h1>
@@ -42,7 +95,7 @@ const index = () => {
                 confirm_bio && name && bio ? <div className={classes.confirm}>
             <h1> Are You Sure! </h1>
                 <div>
-                <input className={classes.btn} type='button' value={"Yes"} onClick={(e)=>{handleBio(e)}}/>
+                <input className={classes.btn} type='button' value={"Yes"} onClick={submitBasicInfo}/>
                 <input className={classes.btn} type='button' value={"No"} onClick={()=>{setConfirm_bio(false)}}/>
                 </div>
                 
@@ -62,6 +115,10 @@ const index = () => {
         </div>
     </div>
     <Footer/>
+    </>
+
+        )
+    }
     </>
   )
 }
